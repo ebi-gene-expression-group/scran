@@ -1,0 +1,122 @@
+#!/usr/bin/env Rscript 
+
+#Build a shared or k-nearest-neighbors graph for cells based on their expression profiles. 
+#By default, buildSNNGraph() uses the mode of shared neighbor weighting described by Xu and Su (2015), but other weighting methods (e.g., the Jaccard index) are also available by setting type=X. 
+#It outputs a SCE with the cluster labels assigned by igraph::cluster_walktrap(). This function finds densely connected subgraphs, also called communities in a graph via random walks.
+
+suppressPackageStartupMessages(require(optparse))
+suppressPackageStartupMessages(require(workflowscriptscommon))
+
+# argument parsing 
+option_list = list(
+  make_option(
+    c("-i", "--input-sce-object"),
+    action = "store",
+    default = NA,
+    type = 'character',
+    help = 'Path to the input SCE object in rds format'
+  ),
+  make_option(
+    c("-s", "--shared"),
+    action = "store",
+    default = TRUE,
+    type = 'logical',
+    help = 'Logical specifying wether to compute a Shared NN Graph (if shared=TRUE) or a kNN Graph(if shared=FALSE).'
+  ),  
+  make_option(
+    c("-k", "--k-value"),
+    action = "store",
+    default = 10,
+    type = 'integer',
+    help = 'An integer scalar specifying the number of nearest neighbors to consider during graph construction..'
+  ),
+    make_option(
+    c("-d", "--d-value"),
+    action = "store",
+    default = 50,
+    type = 'integer',
+    help = 'An integer scalar specifying the number of dimensions to use for the search.'
+  ),
+  make_option(
+    c("-t", "--type"),
+    action = "store",
+    default = NULL,
+    type = 'string',
+    help = 'A string specifying the type of weighting scheme to use for shared neighbors..'
+  ),
+    make_option(
+    c("-v", "--value"),
+    action = "store",
+    default = "logcounts",
+    type = 'character',
+    help = 'String or integer scalar specifying the assay containing the log-expression values.'
+  ),
+  make_option(
+    c("-t", "--transposed"),
+    action = "store",
+    default = FALSE,
+    type = 'logical',
+    help = 'A logical scalar indicating whether x is transposed (i.e., rows are cells).'
+  ),
+  make_option(
+    c("-s", "--subset_row"),
+    action = "store",
+    default = NULL,
+    type = 'logical',
+    help = 'Logical, integer or character vector specifying the rows for which to model the variance. Defaults to all genes in x.'
+  ),
+  make_option(
+    c("-a", "--assay-type"),
+    action = "store",
+    default = "logcounts",
+    type = 'character',
+    help = 'A string specifying which assay values to use.'
+  ),
+  make_option(
+    c("-g", "--get-spikes"),
+    action = "store",
+    default = FALSE,
+    type = 'logical',
+    help = 'Logical specifying wether to perform spike-ins filtering(FALSE) or not (TRUE).'
+  ),
+  make_option(
+    c("-g", "--use-dimred"),
+    action = "store",
+    default =  FALSE
+    type = 'character',
+    help = 'A string specifying whether existing values in reducedDims(x) should be used.'
+  ),
+  make_option(
+    c("-o", "--output-sce-object"),
+    action = "store",
+    default = NA,
+    type = 'character',
+    help = 'Path to the output SCE object with annotated igraph clusters'
+  )
+)
+
+opt = wsc_parse_args(option_list, mandatory = c("input_sce_object", "shared", "output_sce_object"))
+
+#read SCE object
+if(!file.exists(opt$input_sce_object)) stop("Input file does not exist.")
+sce <- readRDS(opt$input_sce_object)
+
+#Compute PCA and denoise it
+suppressPackageStartupMessages(require(scran))
+
+#Shared NN Graph
+if(opt$shared == T){
+    print("--- Computing Shared Nearest Neighbour Graph ---")
+    graph <- BuildSNNGraph(sce, subset.row=opt$subset_row, k=opt$k, d=opt$d, type=opt$type, transposed=opt$transposed, assay.type=opt$assay_type, get.spikes=opt$get_spikes, use.dimred=opt$use_dimred)
+}
+#KNN Graph
+if(opt$shared == F){
+    print("--- Computing K Nearest Neighbour Graph ---")
+    graph <- BuildKNNGraph(sce, subset.row=opt$subset_row, k=opt$k, d=opt$d, transposed=opt$transposed, assay.type=opt$assay_type, get.spikes=opt$get_spikes, use.dimred=opt$use_dimred)
+}
+#Annotate clusters
+clust_annot <- cluster_walktrap(graph)$membership
+sce$cluster <- clust_annot
+
+#save sce object with igraph assigned clusters as RDS.
+saveRDS(sce, opt$output_sce_object)
