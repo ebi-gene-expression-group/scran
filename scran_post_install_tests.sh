@@ -51,13 +51,14 @@ mkdir -p $output_dir
 # List tool outputs/inputs & parameters 
 ################################################################################
 
-#GET TEST DATA
+#get test data
 export accession_code='E-MTAB-5727'
 export expr_data_type='filtered'
 export normalisation_method='CPM'
-#READ 10X DATA
+#read 10X data
 export sce_object=$test_working_dir/'output_10X.rds'
-#READ MARKER FILE
+
+#Read marker file
 #export input_marker_file=$markers_path
 #export filtered_marker_file=$output_dir/'markers_filtered.tsv'
 
@@ -91,17 +92,9 @@ export markers_list=$test_working_dir/'markers.rds'
 export corr_gene_pairs=$test_working_dir/'correlated_gene_pairs.rds'
 #correlated genes
 export corr_genes=$test_working_dir/'correlated_genes.rds'
---------------------
-
-export processed_sce=$output_10X_obj
-export processed_marker_file=$output_dir/'markers_processed.tsv'
-export output_labels=$output_dir/'labels.txt'
-
-### Workflow parameters
-
-export normalised_counts_slot='normcounts'
-export marker_filter_field='pvals_adj' #Note: should be "pvals_adj" but on the test data (E-MTAB-6386)
-export thres_filter=0.05
+#convert SCE to other format
+export convert_to="edgeR"
+export converted_object=$test_working_dir/'converted_object.rds'
 
 ################################################################################
 # Test individual scripts

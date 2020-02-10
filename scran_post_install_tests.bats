@@ -259,3 +259,21 @@
     [ "$status" -eq 0 ] 
     [ -f  "$corr_genes" ] 
 }
+#Convert SCE to other formats 
+@test "Convert SCE to other formats " {
+    if [ "$converted_object" = 'true' ] && [ -f "$converted_object" ]; then
+        skip "$converted_object exists and use_existing_outputs is set to 'true'"
+    fi
+
+    run rm -f $corr_genes &&\
+                        scran_convertTo.R\
+                            --input-sce-object $lognorm_sce\
+                            --type $convert_to\
+                            --output-converted $converted_object
+
+    echo "status = ${status}" #exit status
+    echo "output = ${output}"
+
+    [ "$status" -eq 0 ] 
+    [ -f  "$converted_object" ] 
+}
