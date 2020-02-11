@@ -49,12 +49,12 @@ option_list = list(
   make_option(
     c("-g", "--get-spikes"),
     action = "store",
-    default = FALSE
+    default = TRUE,
     type = 'logical',
     help = 'If get-spikes = FALSE, spike-in transcripts are automatically removed. If get.spikes=TRUE, no filtering on the spike-in transcripts will be performed'
   ),
   make_option(
-    c("-s", "--scaling"),
+    c("-l", "--scaling"),
     action = "store",
     default = NULL,
     type = 'numeric',
@@ -63,7 +63,7 @@ option_list = list(
   make_option(
     c("-m", "--min_mean"),
     action = "store",
-    default = NULL
+    default = 0,
     type = 'numeric',
     help = 'A numeric scalar specifying the minimum (library size-adjusted) average count of genes to be used for normalization.'
   ),
@@ -81,11 +81,11 @@ opt = wsc_parse_args(option_list, mandatory = c("input_sce_object", "assay_type"
 #read SCE object
 if(!file.exists(opt$input_sce_object)) stop("Input file does not exist.")
 sce <- readRDS(opt$input_sce_object)
-
+print(sce)
 #compute size Factors
 suppressPackageStartupMessages(require(scran))
-sce <- computeSumFactors(sce, exprs_values = opt$assay_type, sizes = opt$sizes, 
-                        clusters = opt$custers, scaling = opt$scaling, min.mean = opt$min_mean, subset.row = opt$subset_row, get.spikes = opt$get_spikes)
+sce <- computeSumFactors(sce, assay.type=opt$assay_type, sizes=opt$sizes, 
+                        clusters=opt$custers, scaling=opt$scaling, min.mean = opt$min_mean, subset.row = opt$subset_row, get.spikes = opt$get_spikes)
 
 #include error condition
 

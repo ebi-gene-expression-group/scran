@@ -59,14 +59,17 @@ export data_download_dir=$test_working_dir
 export get_sdrf='TRUE'
 export get_marker_genes='TRUE'
 #read 10X data
-export 10X_data_dir=$test_working_dir/'10x_data'
-export sce_object=$output_dir/'output_10X.rds'
+#export input_data_dir="${test_working_dir}/10x_data"
+export input_data_dir=$test_working_dir
+#export sce_object=$output_dir/'output_10X.rds'
 
 #Read marker file
 #export input_marker_file=$markers_path
 #export filtered_marker_file=$output_dir/'markers_filtered.tsv'
 
 #compute Sum Factors
+export sce_path='/nfs/production3/ma/home/rchazarra/scran-cli/test_data/'
+export sce_object=$sce_path/'abc.rds'
 export counts_factors_assay='counts'
 export counts_factors_sce=$test_working_dir/'counts_factors_sce.rds'
 

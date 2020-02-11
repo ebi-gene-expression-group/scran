@@ -18,7 +18,7 @@ option_list = list(
   make_option(
     c("-t", "--technical"),
     action = "store",
-    default = NULL,
+    default = ,
     type = '',
     help = 'This can be: 1) a function that computes the technical component of the variance for a gene as FitTrendVar, 
                          2) a numeric vector of length equal to the number of rows in x, containing the technical component for each gene.  
@@ -39,7 +39,7 @@ option_list = list(
     help = 'Integer scalars specifying the minimum number of PCs to retain.'
   ),
     make_option(
-    c("-m", "--max-rank"),
+    c("x", "--max-rank"),
     action = "store",
     default = 50,
     type = 'integer',
@@ -52,17 +52,17 @@ option_list = list(
     type = 'character',
     help = 'String or integer scalar specifying the assay containing the log-expression values.'
   ),
-    make_option(
-    c("-v", "--value"),
-    action = "store",
-    default = "logcounts",
-    type = 'character',
-    help = 'String or integer scalar specifying the assay containing the log-expression values.'
-  ),
-  make_option(
+make_option(
     c("-g", "--get-spikes"),
     action = "store",
-    default =  c("pca", "lowrank")
+    default =FALSE,
+    type = 'logical',
+    help = 'If get-spikes = FALSE, spike-in transcripts are automatically removed. If get.spikes=TRUE, no filtering on the spike-in transcripts will be performed'
+  ),  
+make_option(
+    c("-v", "--value"),
+    action = "store",
+    default = "pca",
     type = 'character',
     help = 'String specifying the type of value to return. "pca" will return the PCs, "n" will return the number of retained components, and "lowrank" will return a low-rank approximation.'
   ),
@@ -75,22 +75,18 @@ option_list = list(
   )
 )
 
-opt = wsc_parse_args(option_list, mandatory = c("input_sce_object", "output_sce_object"))
+opt = wsc_parse_args(option_list, mandatory = c("input_sce_object", "technical", "output_sce_object"))
 
 #read SCE object
 if(!file.exists(opt$input_sce_object)) stop("Input file does not exist.")
 sce <- readRDS(opt$input_sce_object)
-
-#read SCE object
-if(!file.exists(opt$technical)) stop("Technical component of variance data.frame/vector/function not provided.")
-
-#HEY!
-#if it is a table read it, BUT WHAT IF IT'S A FUNCTION!
-tech_var <- read.table(file = opt$technical, header=T, sep="\t")
+print(sce)
+#read technical variance df
+if(!file.exists(opt$technical))stop("Object containing the technical components of variation for each gene is not preset, and is required")
 
 #Compute PCA and denoise it
 suppressPackageStartupMessages(require(scran))
-sce <- denoisePCA(sce, technical=tech_var, subset.row=opt$subset_row, min.rank=opt$min_rank, max.rank=opt$max_rank, assay.type=opt$assay_type, value=opt$value, get.spikes=opt$get_spikes)
+sce <- denoisePCA(sce, subset.row=opt$subset_row, min.rank=opt$min_rank, max.rank=opt$max_rank, assay.type=opt$assay_type, value=opt$value, get.spikes=opt$get_spikes)
 
 #TODO: we may want to include subset.row=getTopHVGs(tech_var, prop=0.1)) for greater accuracy.
 

@@ -52,15 +52,15 @@ opt = wsc_parse_args(option_list, mandatory = c("input_sce_object", "output_sce_
 #read SCE object
 if(!file.exists(opt$input_sce_object)) stop("Input file does not exist.")
 sce <- readRDS(opt$input_sce_object)
-
+require(SingleCellExperiment)
 #check the input SCE has spike-in assays
-if(length(altExpNames(sce)) == 0){
+if(length(spikeNames(sce)) == 0){
   stop("Input SCE does not have spike-ins as alternative Experiment assay")
 }
 #check provided spike-in names are present in the SCE object
-if(!opt$spikes %in% altExpNames(sce)){
+if(!opt$spikes %in% spikeNames(sce)){
   stop("Provided spike-in name is not present in the input SCE")
-
+}
 #compute size Factors
 suppressPackageStartupMessages(require(scran))
 sce <- computeSpikeFactors(sce, spikes = opt$spikes, assay.type = opt$assay_type,  general.use=opt$general_use)

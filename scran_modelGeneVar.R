@@ -30,7 +30,7 @@ option_list = list(
     help = 'A numeric matrix containing blocking terms for uninteresting factors of variation.'
   ),
   make_option(
-    c("-s", "--subset_row"),
+    c("-s", "--subset-row"),
     action = "store",
     default = NULL,
     type = 'logical',
@@ -72,7 +72,7 @@ option_list = list(
     help = 'A logical scalar indicating whether statistics from each block should be given equal weight. Otherwise, each block is weighted according to its number of cells. Only used if block is specified.'
   ),
 make_option(
-    c("-m", "--method"),
+    c("-t", "--method"),
     action = "store",
     default = "fisher",
     type = 'logical',
@@ -96,7 +96,7 @@ sce <- readRDS(opt$input_sce_object)
 #Model Variance
 suppressPackageStartupMessages(require(scran))
 var_table <- modelGeneVar(sce, block=opt$block, assay.type=opt$assay_type, design=opt$design, 
-                    subset.row=opt$subset_row, subset.fit=opt$subset_fill, equiweight=opt$equiweight, method=opt$method,
+                    subset.row=opt$subset_row, subset.fit=opt$subset_fit, equiweight=opt$equiweight, method=opt$method,
                     parametric=opt$parametric, min.mean=opt$min_mean)
 
 #save table containing modelled variance and its biological and technical estimates

@@ -58,7 +58,7 @@ option_list = list(
     help = 'String containing an assay name for storing the output normalized values. Defaults to "logcounts" when log=TRUE and "normcounts" otherwise.'
   ),
 make_option(
-    c("-n", "--use_altexps"),
+    c("-e", "--use_altexps"),
     action = "store",
     default = FALSE,
     type = 'logical',

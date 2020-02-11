@@ -23,29 +23,29 @@
     #[ -fdd  "$markers_path" ] #There is no output of this process, data is just downloaded and droped to the output_10x_dir
 }
 #read downloaded data
-@test "read 10X data" {
-    if [ "$use_existing_outputs" = 'true' ] && [ -f "$sce_object" ]; then
-        skip "$sce_object exists and use_existing_outputs is set to 'true'"
-    fi
-
-    run rm -f $sce_object &&\
-                        dropletutils-read-10x-counts.R\
-                            --samples $data_dir\ 
-			    --output-object-file $sce_object
-    echo "status = ${status}" #exit status
-    echo "output = ${output}"
-
-    [ "$status" -eq 0 ] #check if exit status = 0 . This is no error when running.
-    [ -f  "$sce_object" ] #cheks if the file is a regular file (not a directory or device file)
-
-}
+#@test "read 10X data" {
+#    if [ "$use_existing_outputs" = 'true' ] && [ -f "$sce_object" ]; then
+#        skip "$sce_object exists and use_existing_outputs is set to 'true'"
+#    fi
+#
+#    run rm -f $sce_object &&\
+#                        dropletutils-read-10x-counts.R\
+#                            --samples $input_data_dir\ 
+#			    --output-object-file $sce_object
+#    echo "status = ${status}" #exit status
+#    echo "output = ${output}"
+#
+#    [ "$status" -eq 0 ] #check if exit status = 0 . This is no error when running.
+#    [ -f  "$sce_object" ] #cheks if the file is a regular file (not a directory or device file)
+#
+#}
 #compute sum factors
 @test "compute counts factors" {
-    if [ "$use_existing_outputs" = 'true' ] && [ -f "$sum_factors_sce" ]; then
-        skip "$sum_factors_sce exists and use_existing_outputs is set to 'true'"
+    if [ "$use_existing_outputs" = 'true' ] && [ -f "$counts_factors_sce" ]; then
+        skip "$counts_factors_sce exists and use_existing_outputs is set to 'true'"
     fi
 
-    run rm -f $sum_factors_sce &&\
+    run rm -f $counts_factors_sce &&\
                         scran_computeSumFactors.R\
                             --input-sce-object $sce_object\
                             --assay-type $counts_factors_assay\
@@ -55,7 +55,7 @@
     echo "output = ${output}"
 
     [ "$status" -eq 0 ] 
-    [ -f  "$sum_factors_sce" ] 
+    [ -f  "$counts_factors_sce" ] 
 }
 
 #compute spike factors
@@ -96,59 +96,59 @@
     [ -f  "$spike_factors_sce" ] 
 }
 #normalize
-@test "normalize" {
-    if [ "$use_existing_outputs" = 'true' ] && [ -f "$lognorm_sce" ]; then
-        skip "$lognorm_sce exists and use_existing_outputs is set to 'true'"
-    fi
+#@test "normalize" {
+#    if [ "$use_existing_outputs" = 'true' ] && [ -f "$lognorm_sce" ]; then
+#        skip "$lognorm_sce exists and use_existing_outputs is set to 'true'"
+#    fi
+#
+#    run rm -f $lognorm_sce &&\
+#                        scran_normalize.R\
+#                            --input-sce-object $counts_factors_sce\
+#                            --assay-type $counts_factors_assay\
+#                            --output-sce-object $lognorm_sce
+#
+#    echo "status = ${status}" #exit status
+#    echo "output = ${output}"
+#
+#    [ "$status" -eq 0 ] 
+#    [ -f  "$lognorm_sce" ] 
+#}
 
-    run rm -f $lognorm_sce &&\
-                        scran_normalize.R\
-                            --input-sce-object $counts_factors_sce\
-                            --assay-type $counts_factors_assay\
-                            --output-sce-object $lognorm_sce
-
-    echo "status = ${status}" #exit status
-    echo "output = ${output}"
-
-    [ "$status" -eq 0 ] 
-    [ -f  "$lognorm_sce" ] 
-}
-
-#model gene variance
-@test "model gene variance" {
-    if [ "$use_existing_outputs" = 'true' ] && [ -f "$modelGeneVar_table" ]; then
-        skip "$modelGeneVar_table exists and use_existing_outputs is set to 'true'"
-    fi
-
-    run rm -f $modelGeneVar_table &&\
-                        scran_modelGeneVar.R\
-                            --input-sce-object $lognorm_sce\
-                            --output-geneVar-table $GeneVar_table
-
-    echo "status = ${status}" #exit status
-    echo "output = ${output}"
-
-    [ "$status" -eq 0 ] 
-    [ -f  "$modelGeneVar_table" ] 
-}
-
-#model gene variance With Spikes
-@test "model gene variance" {
-    if [ "$use_existing_outputs" = 'true' ] && [ -f "$GeneVarSpikes_table" ]; then
-        skip "$GeneVarSpikes_table exists and use_existing_outputs is set to 'true'"
-    fi
-
-    run rm -f $GeneVarSpikes_table &&\
-                        scran_modelGeneVarWithSpikes.R\
-                            --input-sce-object $lognorm_sce\
-                            --output-geneVarSpikes-table $GeneVarSpikes_table
-
-    echo "status = ${status}" #exit status
-    echo "output = ${output}"
-
-    [ "$status" -eq 0 ] 
-    [ -f  "$GeneVarSpikes_table" ] 
-}
+#model gene variance [SCRAN 1.14]
+#@test "model gene variance" {
+#    if [ "$use_existing_outputs" = 'true' ] && [ -f "$modelGeneVar_table" ]; then
+#        skip "$modelGeneVar_table exists and use_existing_outputs is set to 'true'"
+#    fi
+#
+#    run rm -f $modelGeneVar_table &&\
+#                        scran_modelGeneVar.R\
+#                            --input-sce-object $counts_factors_sce\
+#                            --output-geneVar-table $GeneVar_table
+#
+#    echo "status = ${status}" #exit status
+#    echo "output = ${output}"
+#
+#    [ "$status" -eq 0 ] 
+#    [ -f  "$modelGeneVar_table" ] 
+#}
+#
+##model gene variance With Spikes [SCRAN 1.14]
+#@test "model gene variance" {
+#    if [ "$use_existing_outputs" = 'true' ] && [ -f "$GeneVarSpikes_table" ]; then
+#        skip "$GeneVarSpikes_table exists and use_existing_outputs is set to 'true'"
+#    fi
+#
+#    run rm -f $GeneVarSpikes_table &&\
+#                        scran_modelGeneVarWithSpikes.R\
+#                            --input-sce-object $lognorm_sce\
+#                            --output-geneVarSpikes-table $GeneVarSpikes_table
+#
+#    echo "status = ${status}" #exit status
+#    echo "output = ${output}"
+#
+#    [ "$status" -eq 0 ] 
+#    [ -f  "$GeneVarSpikes_table" ] 
+#}
 
 #denoise PCA
 @test "denoise PCA" {
@@ -169,23 +169,23 @@
     [ -f  "$denoise_pca_sce" ] 
 }
 
-#get clustered PCs
-@test "get clustered PCs" {
-    if [ "$use_existing_outputs" = 'true' ] && [ -f "$cluster_PC_sce" ]; then
-        skip "$cluster_PC_sce exists and use_existing_outputs is set to 'true'"
-    fi
-
-    run rm -f $cluster_PC_sce &&\
-                        scran_getClusteredPCs.R\
-                            --input-sce-object $denoise_pca_sce\
-                            --output-sce-object $cluster_PC_sce
-
-    echo "status = ${status}" #exit status
-    echo "output = ${output}"
-
-    [ "$status" -eq 0 ] 
-    [ -f  "$cluster_PC_sce" ] 
-}
+#get clustered PCs [SCRAN 1.14]
+#@test "get clustered PCs" {
+#    if [ "$use_existing_outputs" = 'true' ] && [ -f "$cluster_PC_sce" ]; then
+#        skip "$cluster_PC_sce exists and use_existing_outputs is set to 'true'"
+#    fi
+#
+#    run rm -f $cluster_PC_sce &&\
+#                        scran_getClusteredPCs.R\
+#                            --input-sce-object $denoise_pca_sce\
+#                            --output-sce-object $cluster_PC_sce
+#
+#    echo "status = ${status}" #exit status
+#    echo "output = ${output}"
+#
+#    [ "$status" -eq 0 ] 
+#    [ -f  "$cluster_PC_sce" ] 
+#}
 
 #buildSNNGraph
 @test "build Nearest Neighbour Graph" {
