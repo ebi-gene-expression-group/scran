@@ -52,11 +52,15 @@ mkdir -p $output_dir
 ################################################################################
 
 #get test data
-export accession_code='E-MTAB-5727'
+export accession_code='E-MTAB-6386'
 export expr_data_type='filtered'
 export normalisation_method='CPM'
+export data_download_dir=$test_working_dir
+export get_sdrf='TRUE'
+export get_marker_genes='TRUE'
 #read 10X data
-export sce_object=$test_working_dir/'output_10X.rds'
+export 10X_data_dir=$test_working_dir/'10x_data'
+export sce_object=$output_dir/'output_10X.rds'
 
 #Read marker file
 #export input_marker_file=$markers_path

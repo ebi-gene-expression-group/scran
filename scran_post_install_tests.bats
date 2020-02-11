@@ -2,22 +2,25 @@
 
 # download test sce object from the link provided in package docs
 @test "get experiment data" {
-    if [ "$use_existing_outputs" = 'true' ] && [ -f "$markers_path" ]; then
-        skip "$markers_path exists and use_existing_outputs is set to 'true'"
+    if [ "$use_existing_outputs" = 'true' ] ; then
+        skip "exists and use_existing_outputs is set to 'true'"
     fi
 
-    run rm -f $markers_path &&\
-                        get_experiment_data.R\
-                            --accesssion-code $data_type\
+    run get_experiment_data.R\
+                            --accesssion-code $accession_code\
                             --expr-data-type $expr_data_type\
                             --normalisation-method $normalisation_method\
+			    --get-sdrf $get_sdrf\
+			    --get-marker-genes $get_marker_genes\
+			    --output-dir-name $data_download_dir\
+			    --exp-data-dir '10x_data'
 
 
     echo "status = ${status}" #exit status
     echo "output = ${output}"
 
     [ "$status" -eq 0 ] #check if exit status = 0 . This is no error when running.
-    [ -f  "$markers_path" ] #There is no output of this process, data is just downloaded and droped to the output_10x_dir
+    #[ -fdd  "$markers_path" ] #There is no output of this process, data is just downloaded and droped to the output_10x_dir
 }
 #read downloaded data
 @test "read 10X data" {
@@ -25,11 +28,10 @@
         skip "$sce_object exists and use_existing_outputs is set to 'true'"
     fi
 
-    run rm -f $test_sce &&\
+    run rm -f $sce_object &&\
                         dropletutils-read-10x-counts.R\
-                            --samples $output_dir\ #DOUBT! is it output_dir or test_working_dir ??
-                            --output-object-file $sce_object
-
+                            --samples $data_dir\ 
+			    --output-object-file $sce_object
     echo "status = ${status}" #exit status
     echo "output = ${output}"
 
