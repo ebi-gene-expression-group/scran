@@ -38,18 +38,11 @@ option_list = list(
     help = 'An integer scalar specifying the number of dimensions to use for the search.'
   ),
   make_option(
-    c("-t", "--type"),
+    c("-y", "--type"),
     action = "store",
     default = NULL,
     type = 'string',
     help = 'A string specifying the type of weighting scheme to use for shared neighbors..'
-  ),
-    make_option(
-    c("-v", "--value"),
-    action = "store",
-    default = "logcounts",
-    type = 'character',
-    help = 'String or integer scalar specifying the assay containing the log-expression values.'
   ),
   make_option(
     c("-t", "--transposed"),
@@ -59,7 +52,7 @@ option_list = list(
     help = 'A logical scalar indicating whether x is transposed (i.e., rows are cells).'
   ),
   make_option(
-    c("-s", "--subset_row"),
+    c("-r", "--subset_row"),
     action = "store",
     default = NULL,
     type = 'logical',
@@ -68,7 +61,7 @@ option_list = list(
   make_option(
     c("-a", "--assay-type"),
     action = "store",
-    default = "logcounts",
+    default = "counts",
     type = 'character',
     help = 'A string specifying which assay values to use.'
   ),
@@ -80,43 +73,39 @@ option_list = list(
     help = 'Logical specifying wether to perform spike-ins filtering(FALSE) or not (TRUE).'
   ),
   make_option(
-    c("-g", "--use-dimred"),
+    c("-u", "--use-dimred"),
     action = "store",
-    default =  FALSE
+    default = NULL,
     type = 'character',
     help = 'A string specifying whether existing values in reducedDims(x) should be used.'
   ),
   make_option(
-    c("-o", "--output-sce-object"),
+    c("-o", "--output-igraph-object"),
     action = "store",
     default = NA,
     type = 'character',
-    help = 'Path to the output SCE object with annotated igraph clusters'
+    help = 'Path to the output igraph object'
   )
 )
 
-opt = wsc_parse_args(option_list, mandatory = c("input_sce_object", "shared", "output_sce_object"))
+opt = wsc_parse_args(option_list, mandatory = c("input_sce_object", "shared", "output_igraph_object"))
 
 #read SCE object
 if(!file.exists(opt$input_sce_object)) stop("Input file does not exist.")
 sce <- readRDS(opt$input_sce_object)
 
-#Compute PCA and denoise it
 suppressPackageStartupMessages(require(scran))
 
 #Shared NN Graph
 if(opt$shared == T){
     print("--- Computing Shared Nearest Neighbour Graph ---")
-    graph <- BuildSNNGraph(sce, subset.row=opt$subset_row, k=opt$k, d=opt$d, type=opt$type, transposed=opt$transposed, assay.type=opt$assay_type, get.spikes=opt$get_spikes, use.dimred=opt$use_dimred)
+    graph <- buildSNNGraph(sce, subset.row=opt$subset_row, k=opt$k, d=opt$d, type=opt$type, assay.type=opt$assay_type, get.spikes=opt$get_spikes, use.dimred=opt$use_dimred)
 }
 #KNN Graph
 if(opt$shared == F){
     print("--- Computing K Nearest Neighbour Graph ---")
-    graph <- BuildKNNGraph(sce, subset.row=opt$subset_row, k=opt$k, d=opt$d, transposed=opt$transposed, assay.type=opt$assay_type, get.spikes=opt$get_spikes, use.dimred=opt$use_dimred)
+    graph <- BuildKNNGraph(sce, subset.row=opt$subset_row, k=opt$k, d=opt$d, assay.type=opt$assay_type, get.spikes=opt$get_spikes, use.dimred=opt$use_dimred)
 }
-#Annotate clusters
-clust_annot <- cluster_walktrap(graph)$membership
-sce$cluster <- clust_annot
 
-#save sce object with igraph assigned clusters as RDS.
-saveRDS(sce, opt$output_sce_object)
+#save sce object 
+saveRDS(graph, opt$output_igraph_object)

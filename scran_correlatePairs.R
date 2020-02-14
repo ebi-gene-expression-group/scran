@@ -13,6 +13,13 @@ option_list = list(
     type = 'character',
     help = 'Path to the input SCE object in rds format'
   ),
+# make_option(
+#    c("-g", "--number-variable-genes"),
+#    action = "store",
+#    default = 2000,
+#    type = 'numeric',
+#    help = 'Number of high variable genes to select from the input-trend-var. Based on variance.'
+#  ),
   make_option(
     c("-b", "--block"),
     action = "store",
@@ -28,14 +35,21 @@ option_list = list(
     help = 'A numeric design matrix containing uninteresting factors to be ignored.'
   ),
   make_option(
-    c("-e", "--equiweight"),
+    c("-a", "--assay-type"),
     action = "store",
-    default = TRUE,
-    type = 'logical',
-    help = 'A logical scalar indicating whether statistics from each block should be given equal weight. Otherwise, each block is weighted according to its number of cells. Only used if block is specified.'
+    default = "counts",
+    type = 'character',
+    help = 'A character specifying which assay values to use.'
   ),
+#  make_option( #[argument available on SCRAN 1.14]
+#    c("-e", "--equiweight"),
+#    action = "store",
+#    default = TRUE,
+#    type = 'logical',
+#    help = 'A logical scalar indicating whether statistics from each block should be given equal weight. Otherwise, each block is weighted according to its number of cells. Only used if block is specified.'
+#  ),
   make_option(
-    c("-i", "--iters"),
+    c("-k", "--iters"),
     action = "store",
     default = 1e+06,
     type = 'logical',
@@ -63,9 +77,9 @@ option_list = list(
     help = 'Logical specifying wether to perform spike-ins filtering(FALSE) or not (TRUE).'
   ),
   make_option(
-    c("-g", "--use-dimred"),
+    c("-m", "--use-dimred"),
     action = "store",
-    default =  FALSE
+    default =  FALSE,
     type = 'character',
     help = 'A string specifying whether existing values in reducedDims(x) should be used.'
   ),
@@ -81,15 +95,13 @@ option_list = list(
 opt = wsc_parse_args(option_list, mandatory = c("input_sce_object", "output_pairs_df"))
 
 #read SCE object
-if(!file.exists(opt$input_sce_object)) stop("Input file does not exist.")
+if(!file.exists(opt$input_sce_object)) stop("Input SCE file does not exist. Required.")
 sce <- readRDS(opt$input_sce_object)
 
-#Compute PCA and denoise it
-suppressPackageStartupMessages(require(scran))
-
 #Compute gene pair-correlation
+suppressPackageStartupMessages(require(scran))
 corr_pairs <- correlatePairs(sce, block=opt$block, subset.row=opt$subset_row, assay.type=opt$assay_type, 
-                            design=opt$design, equiweight=opt$equiweight, use.names=opt$use_names, get.spikes=opt$get_spikes)
+                            design=opt$design,  use.names=opt$use_names, get.spikes=opt$get_spikes)
 
 #save gene-pairs information
 write.table(corr_pairs, file = opt$output_pairs_df, sep = "\t")

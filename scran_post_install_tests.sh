@@ -1,7 +1,7 @@
 #!/usr/bin/env bash 
 
-#REMOVE BEFOR PUSHING
-export PATH=$(pwd):$PATH
+#REMOVE BEFORE PUSHING
+#export PATH=$(pwd):$PATH
 
 script_name=$0 
 
@@ -50,55 +50,43 @@ mkdir -p $output_dir
 ################################################################################
 # List tool outputs/inputs & parameters 
 ################################################################################
-
 #get test data
-export accession_code='E-MTAB-6386'
+export accession_code='E-MTAB-5727'
 export expr_data_type='filtered'
 export normalisation_method='CPM'
 export data_download_dir=$test_working_dir
-export get_sdrf='TRUE'
-export get_marker_genes='TRUE'
+export get_sdrf='FALSE'
+export get_marker_genes='FALSE'
 #read 10X data
-#export input_data_dir="${test_working_dir}/10x_data"
-export input_data_dir=$test_working_dir
-#export sce_object=$output_dir/'output_10X.rds'
-
-#Read marker file
-#export input_marker_file=$markers_path
-#export filtered_marker_file=$output_dir/'markers_filtered.tsv'
-
+export input_data_dir=$test_working_dir/'10x_data'
+export sce_object=$output_dir/'output_10X.rds'
+#sub sample SCE
+export sub_sce=$output_dir/'sub_sce.rds'
 #compute Sum Factors
-export sce_path='/nfs/production3/ma/home/rchazarra/scran-cli/test_data/'
-export sce_object=$sce_path/'abc.rds'
 export counts_factors_assay='counts'
-export counts_factors_sce=$test_working_dir/'counts_factors_sce.rds'
-
+export sce_factors=$test_working_dir/'sce_counts_factors.rds'
 #compute Spike Factors
 export spike_factors_assay='counts'
-export spike_factors_sce=$test_working_dir/'spike_factors_sce.rds'
-
-#normalize
-export lognorm_sce=$test_working_dir/'normalised_sce.rds'
-#model gene variance
-export GeneVar_table=$test_working_dir/'GeneVar_table.txt'
-#model gene variance With Spieks
-export GeneVarSpikes_table=$test_working_dir/'GeneVarSpikes_table.txt'
-
-#denoise PCA
-export denoise_pca_sce=$test_working_dir/'denoised_pca_sce.rds'
-#get clustered PCA
-export cluster_PC_sce=$test_working_dir/'cluster_PCs_sce.rds'
+export sce_factors_spike=$test_working_dir/'sce_spike_factors.rds'
+#scran - trendVar
+export variance_trend=$test_working_dir/'variance_trend.rds'
+#scran - denoise PCA
+export sce_denoise_pca=$test_working_dir/'sce_denoise_pca.rds'
+#get clustered PCA [in SCRAN 1.14]
+#export cluster_PC_sce=$test_working_dir/'cluster_PCs_sce.rds'
 #biuldSNNGraph
 export shared_nn_graph="TRUE"
 export dim_red_NN="PCA_sub"
-export clusters_NN_sce=$test_working_dir/'clusters_NN_sce.rds'
+export igraph_object=$test_working_dir/'igraph_object.rds'
+#extract clusters from igraph
+export sce_clusters=$test_working_dir/'sce_clusters.rds'
 #FindMarkers
 export cluster_groups="cluster"
 export markers_list=$test_working_dir/'markers.rds'
 #correlated pairs of genes
-export corr_gene_pairs=$test_working_dir/'correlated_gene_pairs.rds'
+export corr_gene_pairs=$test_working_dir/'cor_gene_pairs.rds'
 #correlated genes
-export corr_genes=$test_working_dir/'correlated_genes.rds'
+export corr_genes=$test_working_dir/'cor_genes.rds'
 #convert SCE to other format
 export convert_to="edgeR"
 export converted_object=$test_working_dir/'converted_object.rds'

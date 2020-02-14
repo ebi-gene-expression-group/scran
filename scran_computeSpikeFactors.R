@@ -27,9 +27,9 @@ option_list = list(
     make_option(
     c("-a", "--assay-type"),
     action = "store",
-    default = "logcounts",
+    default = "counts",
     type = 'character',
-    help = 'Specify which assay values to use. Default: "logocunts.'
+    help = 'Specify which assay values to use.'
   ),
   make_option(
     c("-g", "--general_use"),
@@ -52,8 +52,9 @@ opt = wsc_parse_args(option_list, mandatory = c("input_sce_object", "output_sce_
 #read SCE object
 if(!file.exists(opt$input_sce_object)) stop("Input file does not exist.")
 sce <- readRDS(opt$input_sce_object)
-require(SingleCellExperiment)
+
 #check the input SCE has spike-in assays
+suppressPackageStartupMessages(require(SingleCellExperiment))
 if(length(spikeNames(sce)) == 0){
   stop("Input SCE does not have spike-ins as alternative Experiment assay")
 }

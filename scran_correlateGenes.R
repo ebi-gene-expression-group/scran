@@ -34,7 +34,7 @@ corr_pairs <- read.table(opt$input_corr_pairs, header = T, sep="\t")
 suppressPackageStartupMessages(require(scran))
 
 #Compute gene pair-correlation
-corr_genes <- correlateGenes(stats=opt$input_corr_pairs)
+corr_genes <- correlateGenes(stats=corr_pairs)
 
 #save gene-pairs information
 write.table(corr_genes, file = opt$output_corr_genes, sep = "\t")

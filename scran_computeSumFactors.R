@@ -1,8 +1,7 @@
 #!/usr/bin/env Rscript 
 
 #computeSumFactors performs a scaling normalization of single-cell RNA-seq data by deconvolving size factors from cell pools. 
-#IMPORTANT: cells should have non-zero library sizes. To do so, a QC step eliminating cells with no counts must be ran. 
-
+#Note: cells should have non-zero library sizes.  
 #The assumption is that most genes are not differentially expressed (DE) between cells, 
 #such that any differences in expression across the majority of genes represents some technical bias that should be removed.
 
@@ -21,7 +20,7 @@ option_list = list(
     make_option(
     c("-a", "--assay-type"),
     action = "store",
-    default = "logcounts",
+    default = "counts",
     type = 'character',
     help = 'Specify which assay values to use. Default: "logocunts'
   ),
@@ -76,18 +75,16 @@ option_list = list(
   )
 )
 
-opt = wsc_parse_args(option_list, mandatory = c("input_sce_object", "assay_type", "output_sce_object"))
+opt = wsc_parse_args(option_list, mandatory = c("input_sce_object", "output_sce_object"))
 
 #read SCE object
 if(!file.exists(opt$input_sce_object)) stop("Input file does not exist.")
+suppressPackageStartupMessages(require(SingleCellExperiment))
 sce <- readRDS(opt$input_sce_object)
-print(sce)
+
 #compute size Factors
 suppressPackageStartupMessages(require(scran))
-sce <- computeSumFactors(sce, assay.type=opt$assay_type, sizes=opt$sizes, 
-                        clusters=opt$custers, scaling=opt$scaling, min.mean = opt$min_mean, subset.row = opt$subset_row, get.spikes = opt$get_spikes)
-
-#include error condition
+sce <- computeSumFactors(sce, assay.type=opt$assay_type, sizes=opt$sizes, clusters=opt$custers, scaling=opt$scaling, min.mean = opt$min_mean, subset.row = opt$subset_row, get.spikes = opt$get_spikes)
 
 #save SCE object with size Factors
 saveRDS(sce, opt$output_sce_object)
