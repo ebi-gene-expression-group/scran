@@ -1,7 +1,7 @@
 #!/usr/bin/env bash 
 
 #REMOVE BEFORE PUSHING
-export PATH=$(pwd):$PATH
+#export PATH=$(pwd):$PATH
 
 script_name=$0 
 
