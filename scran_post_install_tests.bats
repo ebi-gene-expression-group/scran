@@ -232,7 +232,6 @@
     run rm -f $corr_gene_pairs &&\
                        scran_correlatePairs.R\
                             --input-sce-object $sub_sce\
-			    --input-trend-var $variance_trend\
                             --output-pairs-df $corr_gene_pairs
 
     echo "status = ${status}" #exit status

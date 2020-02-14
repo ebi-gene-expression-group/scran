@@ -13,13 +13,6 @@ option_list = list(
     type = 'character',
     help = 'Path to the input SCE object in rds format'
   ),
-# make_option(
-#    c("-g", "--number-variable-genes"),
-#    action = "store",
-#    default = 2000,
-#    type = 'numeric',
-#    help = 'Number of high variable genes to select from the input-trend-var. Based on variance.'
-#  ),
   make_option(
     c("-b", "--block"),
     action = "store",
