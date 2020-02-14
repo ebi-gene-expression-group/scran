@@ -17,7 +17,7 @@ option_list = list(
     type = 'character',
     help = 'Path to the input SCE object in rds format'
   ),
-  make_option(
+  make_option( #[argument in SCRAN 1.14 funciton]
     c("-s", "--spikes"),
     action = "store",
     default = "ERCC",
@@ -64,7 +64,9 @@ if(!opt$spikes %in% spikeNames(sce)){
 }
 #compute size Factors
 suppressPackageStartupMessages(require(scran))
-sce <- computeSpikeFactors(sce, spikes = opt$spikes, assay.type = opt$assay_type,  general.use=opt$general_use)
+sce <- computeSpikeFactors(sce, 
+			#spikes=opt$spikes,#argument available in SCRAN 1.14 
+			assay.type=opt$assay_type, general.use=opt$general_use)
 
 #save SCE object with size Factors
 saveRDS(sce, opt$output_sce_object)

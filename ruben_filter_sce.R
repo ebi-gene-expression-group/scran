@@ -23,7 +23,7 @@ option_list = list(
   make_option(
     c("-g", "--n-genes"),
     action = "store",
-    default = 1000,
+    default = 1200,
     type = 'integer',
     help= "Integer indicating how many genes should we sample from the input object."
   ),
@@ -62,6 +62,9 @@ print(sce)
 sce <- sce[sample(rownames(sce), opt$n_genes), sample(colnames(sce), opt$n_cells)]
 print(sce)
 
+#add some genes as spike-ins, so that scran_computeSpikeFactors.R can run without error
+suppressPackageStartupMessages(require(SingleCellExperiment))
+sce <- `isSpike<-`(sce, type = "ERCC", value = c(sample(rownames(sce), 25)))
 #Output to a serialized R object
 saveRDS(sce, file = opt$output_sce_object)
 
