@@ -6,7 +6,8 @@
         skip "exists and use_existing_outputs is set to 'true'"
     fi
 
-    run get_experiment_data.R --accesssion-code $accession_code\
+    run get_experiment_data.R\ 
+	--accesssion-code $accession_code\
 	--expr-data-type $expr_data_type\
 	--normalisation-method $normalisation_method\
 	--get-sdrf $get_sdrf\
