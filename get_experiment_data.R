@@ -176,6 +176,7 @@ for(idx in seq_along(expr_data)){
     base_name = basename(url)
     out_path = paste(output_dir, opt$exp_data_dir, base_name, sep="/")
     download.file(url=url, destfile=out_path, method = 'wget')
+    Sys.sleep(5)
     # decompress files 
     if(summary(file(out_path))$class == 'gzfile'){
         gunzip(out_path, overwrite = TRUE, remove = TRUE)
@@ -207,6 +208,8 @@ for(idx in seq_along(non_expr_files)){
         url = paste(url_prefix, names[idx], sep=".")
         if(!url.exists(url)) stop(paste("File", url, "does not exist"))
         system(paste("wget", url, "-P", output_dir))
+        Sys.sleep(5)
+
         # do not rename if multiple marker files downloaded
         if(!opt$use_full_names & !(idx==4 & multiple_markers)){
             i = paste(output_dir, basename(url), sep="/")
