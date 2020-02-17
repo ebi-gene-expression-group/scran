@@ -8,7 +8,6 @@ suppressPackageStartupMessages(require(R.utils))
 suppressPackageStartupMessages(require(yaml))
 suppressPackageStartupMessages(require(RCurl))
 
-
 option_list = list(
     make_option(
         c("-a", "--accesssion-code"),
