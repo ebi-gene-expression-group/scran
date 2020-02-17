@@ -175,7 +175,7 @@ for(idx in seq_along(expr_data)){
     }
     base_name = basename(url)
     out_path = paste(output_dir, opt$exp_data_dir, base_name, sep="/")
-    download.file(url=url, destfile=out_path, methd = 'wget')
+    download.file(url=url, destfile=out_path, method = 'wget')
     # decompress files 
     if(summary(file(out_path))$class == 'gzfile'){
         gunzip(out_path, overwrite = TRUE, remove = TRUE)
