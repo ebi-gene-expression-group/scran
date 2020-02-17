@@ -168,6 +168,14 @@ if(opt$decorated_rows){
 expr_data = c("mtx.gz", "mtx_cols.gz", rows)
 file_names = c("matrix.mtx", "barcodes.tsv", "genes.tsv")
 dir.create(paste(output_dir, opt$exp_data_dir, sep="/"))
+
+# Make a sleep function- Sys.sleep() seemed to have issues on Travis
+
+sleep <- function(x){
+    date_time<-Sys.time()
+    while((as.numeric(Sys.time()) - as.numeric(date_time))<x){}
+}
+
 for(idx in seq_along(expr_data)){
     url = paste(expr_prefix, expr_data[idx], sep=".")
     if(!url.exists(url)){
@@ -176,7 +184,7 @@ for(idx in seq_along(expr_data)){
     base_name = basename(url)
     out_path = paste(output_dir, opt$exp_data_dir, base_name, sep="/")
     download.file(url=url, destfile=out_path, method = 'wget')
-    Sys.sleep(5)
+    sleep(5)
     # decompress files 
     if(summary(file(out_path))$class == 'gzfile'){
         gunzip(out_path, overwrite = TRUE, remove = TRUE)
@@ -208,7 +216,7 @@ for(idx in seq_along(non_expr_files)){
         url = paste(url_prefix, names[idx], sep=".")
         if(!url.exists(url)) stop(paste("File", url, "does not exist"))
         system(paste("wget", url, "-P", output_dir))
-        Sys.sleep(5)
+        sleep(5)
 
         # do not rename if multiple marker files downloaded
         if(!opt$use_full_names & !(idx==4 & multiple_markers)){
