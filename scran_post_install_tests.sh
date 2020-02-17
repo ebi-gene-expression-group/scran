@@ -51,7 +51,7 @@ mkdir -p $output_dir
 # List tool outputs/inputs & parameters 
 ################################################################################
 #get test data
-export accession_code='E-MTAB-5727'
+export accession_code='E-MTAB-6077'
 export expr_data_type='filtered'
 export normalisation_method='CPM'
 export data_download_dir=$test_working_dir
