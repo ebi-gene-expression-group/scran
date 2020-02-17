@@ -35,7 +35,7 @@
     fi
 
     run rm -f $sub_sce &&\
-			ruben_filter_sce.R\
+			scran-cli-filter-sce.R\
 				--input-sce-object $sce_object\
 				--output-sce-object $sub_sce
     echo "status = ${status}" #exit status
@@ -53,7 +53,7 @@
     fi
 
     run rm -f $sce_factors &&\
-                        run scran_computeSumFactors.R\
+                        run scran-compute-sum-factors.R\
                             --input-sce-object $sub_sce\
                             --assay-type $counts_factors_assay\
                             --output-sce-object $sce_factors
@@ -72,7 +72,7 @@
     fi
 
     run rm -f $sce_factors_spike &&\
-                        scran_computeSpikeFactors.R\
+                        scran-compute-spike-factors.R\
                             --input-sce-object $sub_sce\
                             --assay-type $spike_factors_assay\
                             --output-sce-object $sce_factors_spike
@@ -91,7 +91,7 @@
 #    fi
 #
 #    run rm -f $GeneVarSpikes_table &&\
-#                        scran_modelGeneVarWithSpikes.R\
+#                        scran-model-gene-var-with-spikes.R\
 #                            --input-sce-object $lognorm_sce\
 #                            --output-geneVarSpikes-table $GeneVarSpikes_table
 #
@@ -109,7 +109,7 @@
     fi
 
     run rm -f $variance_trend &&\
-                        scran_trendVar.R\
+                        scran-trend-var.R\
                             --input-sce-object $sub_sce\
 			    --assay-type $counts_factors_assay\
 			    --output-trend-var $variance_trend 
@@ -128,7 +128,7 @@
     fi
 
     run rm -f $sce_denoise_pca &&\
-                        scran_denoisePCA.R\
+                        scran-denoise-pca.R\
                             --input-sce-object $sub_sce\
 			    --assay-type $counts_factors_assay\
                             --technical $variance_trend\
@@ -148,7 +148,7 @@
 #    fi
 #
 #    run rm -f $cluster_PC_sce &&\
-#                        scran_getClusteredPCs.R\
+#                        scran-get-clustered-pcs.R\
 #                            --input-sce-object $sce_denoise_pca\
 #                            --output-sce-object $cluster_PC_sce
 #
@@ -166,7 +166,7 @@
     fi
 
     run rm -f $clusters_NN_sce &&\
-                         scran_buildSNNGraph.R\
+                         scran-build-snn-graph.R\
                             --input-sce-object $sce_denoise_pca\
                             --shared=$shared_nn_graph\
                             --output-igraph-object $igraph_object
@@ -203,7 +203,7 @@
     fi
 
     run rm -f $markers_list &&\
-                       scran_findMarkers.R\
+                       scran-find-markers.R\
                             --input-sce-object $sce_clusters\
                             --cluster $cluster_groups\
                             --output-markers $markers_list
@@ -222,7 +222,7 @@
     fi
 
     run rm -f $corr_gene_pairs &&\
-                       scran_correlatePairs.R\
+                       scran-correlate-pairs.R\
                             --input-sce-object $sub_sce\
                             --output-pairs-df $corr_gene_pairs
 
@@ -240,7 +240,7 @@
     fi
 
     run rm -f $corr_genes &&\
-                       scran_correlateGenes.R\
+                       scran-correlate-genes.R\
                             --input-corr-pairs $corr_gene_pairs\
                             --output-corr-genes $corr_genes
 
@@ -257,7 +257,7 @@
     fi
 
     run rm -f $converted_object &&\
-                        scran_convertTo.R\
+                        scran-convert-to.R\
                             --input-sce-object $sce_object\
                             --type $convert_to\
                             --output-converted $converted_object
