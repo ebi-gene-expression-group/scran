@@ -2,7 +2,7 @@
 
 #Build a shared or k-nearest-neighbors graph for cells based on their expression profiles. 
 #By default, buildSNNGraph() uses the mode of shared neighbor weighting described by Xu and Su (2015), but other weighting methods (e.g., the Jaccard index) are also available by setting type=X. 
-#It outputs a SCE with the cluster labels assigned by igraph::cluster_walktrap(). This function finds densely connected subgraphs, also called communities in a graph via random walks.
+#Outputs an igraph class object. 
 
 suppressPackageStartupMessages(require(optparse))
 suppressPackageStartupMessages(require(workflowscriptscommon))
@@ -14,7 +14,7 @@ option_list = list(
     action = "store",
     default = NA,
     type = 'character',
-    help = 'Path to the input SCE object in rds format'
+    help = 'Path to the input SCE object in rds format.'
   ),
   make_option(
     c("-s", "--shared"),
@@ -28,7 +28,7 @@ option_list = list(
     action = "store",
     default = 10,
     type = 'integer',
-    help = 'An integer scalar specifying the number of nearest neighbors to consider during graph construction..'
+    help = 'An integer scalar specifying the number of nearest neighbors to consider during graph construction.'
   ),
     make_option(
     c("-d", "--d-value"),
@@ -41,8 +41,8 @@ option_list = list(
     c("-y", "--type"),
     action = "store",
     default = NULL,
-    type = 'string',
-    help = 'A string specifying the type of weighting scheme to use for shared neighbors..'
+    type = 'character',
+    help = 'A string specifying the type of weighting scheme to use for shared neighbors.'
   ),
   make_option(
     c("-t", "--transposed"),
@@ -61,9 +61,9 @@ option_list = list(
   make_option(
     c("-a", "--assay-type"),
     action = "store",
-    default = "counts",
+    default = "logcounts",
     type = 'character',
-    help = 'A string specifying which assay values to use.'
+    help = 'A string specifying which assay values to use. Default: logcounts.'
   ),
   make_option(
     c("-g", "--get-spikes"),
@@ -84,7 +84,7 @@ option_list = list(
     action = "store",
     default = NA,
     type = 'character',
-    help = 'Path to the output igraph object'
+    help = 'Path to the output igraph object in RDS format.'
   )
 )
 

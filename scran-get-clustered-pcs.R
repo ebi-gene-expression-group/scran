@@ -1,5 +1,5 @@
 #!/usr/bin/env Rscript 
-
+#This function is available on SCRAN 1.14
 #This function inputs a low-dimensional embedding and adjusts its n_PCs so that they are not less than the number of subpopulations (which are unknown, of course, so we use the number of clusters as a proxy). 
 
 #TODO: Include more detailed documentation/indications. 

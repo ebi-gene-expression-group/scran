@@ -1,6 +1,6 @@
 #!/usr/bin/env Rscript 
 
-#This function performs a PCA which n_PCs is adjusted to eliminate random technical noise in the data.
+#This function performs a PCA with an adjusted n_PCs to eliminate random technical noise in the data.
 #The choice of the number of PCs to discard is based on the estimates of technical variance in technical, which may be computed by modelGeneVar or modelGeneVarWithSpikes, or deprecated trendVar. 
 
 suppressPackageStartupMessages(require(optparse))
@@ -13,7 +13,7 @@ option_list = list(
     action = "store",
     default = NA,
     type = 'character',
-    help = 'Path to the input SCE object in rds format'
+    help = 'Path to the input SCE object in rds format.'
   ),
   make_option(
     c("-t", "--technical"),
@@ -57,7 +57,7 @@ make_option(
     action = "store",
     default =FALSE,
     type = 'logical',
-    help = 'If get-spikes = FALSE, spike-in transcripts are automatically removed. If get.spikes=TRUE, no filtering on the spike-in transcripts will be performed'
+    help = 'If get-spikes = FALSE, spike-in transcripts are automatically removed. If get.spikes=TRUE, no filtering on the spike-in transcripts will be performed.'
   ),  
 make_option(
     c("-v", "--value"),
@@ -71,7 +71,7 @@ make_option(
     action = "store",
     default = NA,
     type = 'character',
-    help = 'Path to the output SCE object with denoised PC number'
+    help = 'Path to the output SCE object with denoised PC number.'
   )
 )
 
@@ -86,7 +86,7 @@ if(!file.exists(opt$technical))stop("Object containing the technical components 
 variance_trend <- readRDS(opt$technical)
 variance_trend_function <- variance_trend$trend
 
-#Compute PCA and denoise it
+#Compute denoise PCA
 suppressPackageStartupMessages(require(scran))
 sce <- denoisePCA(sce,technical=variance_trend_function, subset.row=opt$subset_row, min.rank=opt$min_rank,  max.rank=opt$max_rank, assay.type=opt$assay_type, value=opt$value, get.spikes=opt$get_spikes)
 

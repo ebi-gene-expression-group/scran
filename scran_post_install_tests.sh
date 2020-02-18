@@ -62,11 +62,15 @@ export input_data_dir=$test_working_dir/'10x_data'
 export sce_object=$output_dir/'output_10X.rds'
 #sub sample SCE
 export sub_sce=$output_dir/'sub_sce.rds'
+export log_transform="TRUE"
+export filter_min_genes=200 
+export filter_min_cells=80 #arbitrary value
+export n_spikes=25 #arbitrary value
 #compute Sum Factors
-export counts_factors_assay='counts'
+export counts_factors_assay='logcounts'
 export sce_factors=$test_working_dir/'sce_counts_factors.rds'
 #compute Spike Factors
-export spike_factors_assay='counts'
+export spike_factors_assay='logcounts'
 export sce_factors_spike=$test_working_dir/'sce_spike_factors.rds'
 #scran - trendVar
 export variance_trend=$test_working_dir/'variance_trend.rds'
@@ -76,6 +80,7 @@ export sce_denoise_pca=$test_working_dir/'sce_denoise_pca.rds'
 #export cluster_PC_sce=$test_working_dir/'cluster_PCs_sce.rds'
 #biuldSNNGraph
 export shared_nn_graph="TRUE"
+export graph_assay="logcounts"
 export dim_red_NN="PCA_sub"
 export igraph_object=$test_working_dir/'igraph_object.rds'
 #extract clusters from igraph

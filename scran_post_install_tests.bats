@@ -37,6 +37,10 @@
     run rm -f $sub_sce &&\
 			scran-cli-filter-sce.R\
 				--input-sce-object $sce_object\
+				--min-genes $filter_min_genes\
+				--min-cells $filter_min_cells\
+				--n-spikes $n_spikes\
+				--log $log_transform\
 				--output-sce-object $sub_sce
     echo "status = ${status}" #exit status
     echo "output = ${output}"
@@ -84,8 +88,27 @@
     [ -f  "$sce_factors_spike" ] 
 }
 
-#model gene variance With Spikes [SCRAN 1.14]
+#model gene variance [SCRAN 1.14]
 #@test "model gene variance" {
+#    if [ "$use_existing_outputs" = 'true' ] && [ -f "$GeneVar_table" ]; then
+#        skip "$GeneVar_table exists and use_existing_outputs is set to 'true'"
+#    fi
+#
+#    run rm -f $GeneVar_table &&\
+#                       scran-model-gene-var.R\
+#                            --input-sce-object $sub_sce\
+#                            --output-geneVarSpikes-table $GeneVar_table
+#
+#    echo "status = ${status}" #exit status
+#    echo "output = ${output}"
+#
+#    [ "$status" -eq 0 ] 
+#    [ -f  "$GeneVar_table" ] 
+#}
+
+
+#model gene variance With Spikes [SCRAN 1.14]
+#@test "model gene variance with spikes" {
 #    if [ "$use_existing_outputs" = 'true' ] && [ -f "$GeneVarSpikes_table" ]; then
 #        skip "$GeneVarSpikes_table exists and use_existing_outputs is set to 'true'"
 #    fi
@@ -166,10 +189,11 @@
     fi
 
     run rm -f $clusters_NN_sce &&\
-                         scran-build-snn-graph.R\
-                            --input-sce-object $sce_denoise_pca\
-                            --shared=$shared_nn_graph\
-                            --output-igraph-object $igraph_object
+			scran-build-snn-graph.R\
+				--input-sce-object $sce_denoise_pca\
+				--shared=$shared_nn_graph\
+				--assay-type=$graph_assay\
+				--output-igraph-object $igraph_object
 
     echo "status = ${status}" #exit status
     echo "output = ${output}"
@@ -184,10 +208,10 @@
     fi
 
     run rm -f $sce_clusters &&\
-                        igraph_extract_clusters.R\
-                            --input-igraph-object $igraph_object\
-                            --input-sce-object $sce_denoise_pca\
-                            --output-sce-object $sce_clusters  
+			igraph_extract_clusters.R\
+				--input-igraph-object $igraph_object\
+                            	--input-sce-object $sce_denoise_pca\
+                            	--output-sce-object $sce_clusters  
 
     echo "status = ${status}" #exit status
     echo "output = ${output}"

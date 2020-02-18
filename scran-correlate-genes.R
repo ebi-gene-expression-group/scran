@@ -13,14 +13,14 @@ option_list = list(
     action = "store",
     default = NA,
     type = 'character',
-    help = 'Path to the  DataFrame of pairwise correlation statistics, returned by correlatePairs'
+    help = 'Path to the  DataFrame of pairwise correlation statistics, returned by correlatePairs.'
   ),
   make_option(
     c("-o", "--output-corr-genes"),
     action = "store",
     default = NA,
     type = 'character',
-    help = 'A DataFrame with one row per unique gene in stats and containing the fields: gene, rho, p.value, FDR, limited'
+    help = 'A DataFrame with one row per unique gene in stats and containing the fields: gene, rho, p.value, FDR, limited.'
   )
 )
 
@@ -36,5 +36,5 @@ suppressPackageStartupMessages(require(scran))
 #Compute gene pair-correlation
 corr_genes <- correlateGenes(stats=corr_pairs)
 
-#save gene-pairs information
+#save gene-pairs table
 write.table(corr_genes, file = opt$output_corr_genes, sep = "\t")

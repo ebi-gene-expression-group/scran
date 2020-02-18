@@ -12,7 +12,7 @@ option_list = list(
     action = "store",
     default = NA,
     type = 'character',
-    help = 'Path to the input SCE object in rds format'
+    help = 'Path to the input SCE object in rds format.'
   ),
   make_option(
     c("-t", "--type"),
@@ -82,4 +82,4 @@ converted_object <- convertTo(sce, type=opt$type, assay.type=opt$assay_type,
 			get.spikes=opt$get_spikes)
 
 #save converted object to RDS
-saveRDS(converted_object, file = opt$output_converted)#
+saveRDS(converted_object, file = opt$output_converted)

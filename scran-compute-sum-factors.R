@@ -2,8 +2,7 @@
 
 #computeSumFactors performs a scaling normalization of single-cell RNA-seq data by deconvolving size factors from cell pools. 
 #Note: cells should have non-zero library sizes.  
-#The assumption is that most genes are not differentially expressed (DE) between cells, 
-#such that any differences in expression across the majority of genes represents some technical bias that should be removed.
+#The assumption is that most genes are not differentially expressed (DE) between cells, such that any differences in expression across the majority of genes represents some technical bias that should be removed.
 
 suppressPackageStartupMessages(require(optparse))
 suppressPackageStartupMessages(require(workflowscriptscommon))
@@ -15,14 +14,14 @@ option_list = list(
     action = "store",
     default = NA,
     type = 'character',
-    help = 'Path to the input SCE object in rds format'
+    help = 'Path to the input SCE object in rds format.'
   ),
     make_option(
     c("-a", "--assay-type"),
     action = "store",
-    default = "counts",
+    default = "logcounts",
     type = 'character',
-    help = 'Specify which assay values to use. Default: "logocunts'
+    help = 'Specify which assay values to use. Default: "logcounts".'
   ),
    make_option(
     c("-s", "--sizes"),
@@ -43,14 +42,14 @@ option_list = list(
     action = "store",
     default = NULL,
     type = 'character',
-    help = 'Logical, integer or character vector indicating the rows of SCE to use. If a character vector, it must contain the names of the rows in SCE'
+    help = 'Logical, integer or character vector indicating the rows of SCE to use. If a character vector, it must contain the names of the rows in SCE.'
   ),
   make_option(
     c("-g", "--get-spikes"),
     action = "store",
     default = TRUE,
     type = 'logical',
-    help = 'If get-spikes = FALSE, spike-in transcripts are automatically removed. If get.spikes=TRUE, no filtering on the spike-in transcripts will be performed'
+    help = 'If get-spikes = FALSE, spike-in transcripts are automatically removed. If get.spikes=TRUE, no filtering on the spike-in transcripts will be performed.'
   ),
   make_option(
     c("-l", "--scaling"),
@@ -71,7 +70,7 @@ option_list = list(
     action = "store",
     default = NA,
     type = 'character',
-    help = 'Path to the output SCE object containing the vector of size factors in sizeFactors(x)'
+    help = 'Path to the output SCE object containing the vector of size factors in sizeFactors(x).'
   )
 )
 

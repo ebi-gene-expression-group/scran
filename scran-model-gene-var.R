@@ -1,5 +1,6 @@
 #!/usr/bin/env Rscript 
 
+#This function is available on SCRAN 1.14
 #Function to perform modelling the per-gene variance. 
 #We decompose the total variance of each gene into its biological and technical components by fitting a trend to the endogenous variances(A. T. Lun, McCarthy, and Marioni 2016).
 
@@ -13,7 +14,7 @@ option_list = list(
     action = "store",
     default = NA,
     type = 'character',
-    help = 'Path to the input SCE object in rds format'
+    help = 'Path to the input SCE object in rds format.'
   ),
   make_option(
     c("-b", "--block"),
@@ -83,7 +84,7 @@ make_option(
     action = "store",
     default = NA,
     type = 'character',
-    help = 'Path to the table where each row corresponds to a gene in sce, and contains: mean, total var, bio var, tech var, p.value and FDR'
+    help = 'Path to the table where each row corresponds to a gene in sce, and contains: mean, total var, bio var, tech var, p.value and FDR.'
   )
 )
 

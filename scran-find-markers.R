@@ -13,7 +13,7 @@ option_list = list(
     action = "store",
     default = NA,
     type = 'character',
-    help = 'Path to the input SCE object in rds format'
+    help = 'Path to the input SCE object in rds format.'
   ),
   make_option(
     c("-c", "--clusters"), #This argument is named "groups" on SCRAN 1.14
@@ -62,7 +62,7 @@ option_list = list(
     action = "store",
     default = NA,
     type = 'character',
-    help = 'Path to the rds  list of DataFrames with a sorted marker gene list per cluster/group.'
+    help = 'Path to the rds list of DataFrames with a sorted marker gene list per cluster/group.'
   )
 )
 

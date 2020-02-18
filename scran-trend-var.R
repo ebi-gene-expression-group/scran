@@ -1,5 +1,6 @@
 #!/usr/bin/env Rscript 
 
+#Function available in SCRAN 1.12, substituted in SCRAN 1.14 by fitTrendVar.
 #Fit a mean-dependent trend to the variances of the log-normalized expression values derived from count data.
 
 suppressPackageStartupMessages(require(optparse))
@@ -12,7 +13,7 @@ option_list = list(
     action = "store",
     default = NA,
     type = 'character',
-    help = 'Path to the input SCE object in rds format'
+    help = 'Path to the input SCE object in rds format.'
   ),
    make_option(
     c("-m", "--min-mean"),
@@ -40,7 +41,7 @@ option_list = list(
     action = "store",
     default = "logcounts",
     type = 'character',
-    help = 'String or integer scalar specifying the assay containing the log-expression values.'
+    help = 'String or integer scalar specifying the assay containing the log-expression values. Default: "logcounts"'
   ),
   make_option(
     c("-k", "--use-spikes"),
@@ -66,7 +67,7 @@ sce <- readRDS(opt$input_sce_object)
 
 #Compute trendVar
 suppressPackageStartupMessages(require(scran))
-fit_trend_var <-trendVar(sce, method=opt$method, min.mean =opt$min_mean, assay.type=opt$assay_type, parametric=opt$parametric, use.spikes=opt$use_spikes) 
+fit_trend_var <-trendVar(sce, method=opt$method, min.mean=opt$min_mean, assay.type=opt$assay_type, parametric=opt$parametric, use.spikes=opt$use_spikes) 
 
 #save RDS object
 saveRDS(fit_trend_var, opt$output_trend_var)

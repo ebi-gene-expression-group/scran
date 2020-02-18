@@ -12,21 +12,21 @@ option_list = list(
     action = "store",
     default = NA,
     type = 'character',
-    help = 'Path to the input igraph object in rds format'
+    help = 'Path to the input igraph object in rds format.'
   ),
   make_option(
     c("-s", "--input-sce-object"),
     action = "store",
     default = NA,
     type = 'character',
-    help = 'Path to the input SCE object where we want to add the cluster annotation from the igraph object'
+    help = 'Path to the input SCE object where to add the cluster annotation extracted from the igraph objecti.'
   ),
   make_option(
     c("-o", "--output-sce-object"),
     action = "store",
     default = NA,
     type = 'character',
-    help = 'Path to the output SCE object in rds format with cluster annotation as $cluster'
+    help = 'Path to the output SCE object in rds format with cluster annotation in $cluster.'
  )
 ) 
 

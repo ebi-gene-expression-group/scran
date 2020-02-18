@@ -11,7 +11,7 @@ option_list = list(
     action = "store",
     default = NA,
     type = 'character',
-    help = 'Path to the input SCE object in rds format'
+    help = 'Path to the input SCE object in rds format.'
   ),
   make_option(
     c("-b", "--block"),
@@ -88,7 +88,7 @@ option_list = list(
 opt = wsc_parse_args(option_list, mandatory = c("input_sce_object", "output_pairs_df"))
 
 #read SCE object
-if(!file.exists(opt$input_sce_object)) stop("Input SCE file does not exist. Required.")
+if(!file.exists(opt$input_sce_object)) stop("Input SCE file does not exist.")
 sce <- readRDS(opt$input_sce_object)
 
 #Compute gene pair-correlation
@@ -96,5 +96,5 @@ suppressPackageStartupMessages(require(scran))
 corr_pairs <- correlatePairs(sce, block=opt$block, subset.row=opt$subset_row, assay.type=opt$assay_type, 
                             design=opt$design,  use.names=opt$use_names, get.spikes=opt$get_spikes)
 
-#save gene-pairs information
+#save gene-pairs table
 write.table(corr_pairs, file = opt$output_pairs_df, sep = "\t")

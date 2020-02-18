@@ -4,11 +4,25 @@ Scran implements functions for low-level analyses of single-cell RNA-seq data. M
 
 A vignette with the usage of scran can be found [here](https://bioconductor.org/packages/release/bioc/vignettes/scran/inst/doc/scran.html) 
 
-**Note**: this scripts are for Scran version 1.12. 
+**Note**: the following are only present in Scran version 1.12: 
+- scran-trend-var.R (*trendVar()* is deprecated in latest scran for *FitTrendVar()*)
+
+The following scripts are only present in latest version of scran (1.14):
+- scran-model-gene-var.R 
+- scran-model-gene-var-with-spikes.R
 
 ## Install
+The simplest way to install package is to use conda. It is recommended to install into clean environment to avoid dependency conflicts.
+```
+conda install scran-cli
+```
 
 ## Test installation
+To run post-install tests, you will need to install bats testing system into the environment you created:
+```
+conda install bats
+```
+Then, run scpred_post_install_tests.sh
 
 ## Commands
 
